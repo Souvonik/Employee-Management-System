@@ -1,0 +1,118 @@
+
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_EMPLOYEES 100
+
+struct employee {
+    int id;
+    char name[50];
+    int age;
+    float salary;
+    char job_title[50]; // new field for job title
+};
+
+int num_employees = 0;
+struct employee employees[MAX_EMPLOYEES];
+
+void add_employee() {
+    if (num_employees >= MAX_EMPLOYEES) {
+        printf("Error: Maximum number of employees reached.\n");
+        return;
+    }
+    
+    struct employee new_employee;
+    printf("Enter employee ID: ");
+    scanf("%d", &new_employee.id);
+    printf("Enter employee name: ");
+    scanf("%s", new_employee.name);
+    printf("Enter employee age: ");
+    scanf("%d", &new_employee.age);
+    printf("Enter employee salary: ");
+    scanf("%f", &new_employee.salary);
+    printf("Enter employee job title: ");
+    scanf("%s", new_employee.job_title);
+
+    employees[num_employees] = new_employee;
+    num_employees++;
+    
+    printf("Employee added successfully.\n");
+}
+
+void list_employees() {
+    if (num_employees == 0) {
+        printf("No employees found.\n");
+        return;
+    }
+    
+    printf("ID\tName\tAge\tSalary\tJob Title\n");
+    printf("------------------------------------------------\n");
+    
+    for (int i = 0; i < num_employees; i++) {
+        struct employee emp = employees[i];
+        printf("%d\t%s\t%d\t%.2f\t%s\n", emp.id, emp.name, emp.age, emp.salary, emp.job_title);
+    }
+}
+
+int find_employee(int id) {
+    for (int i = 0; i < num_employees; i++) {
+        if (employees[i].id == id) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+void delete_employee() {
+    int id;
+    printf("Enter employee ID: ");
+    scanf("%d", &id);
+    
+    int index = find_employee(id);
+    if (index == -1) {
+        printf("Error: Employee not found.\n");
+        return;
+    }
+    
+    for (int i = index; i < num_employees - 1; i++) {
+        employees[i] = employees[i + 1];
+    }
+    num_employees--;
+    
+    printf("Employee deleted successfully.\n");
+}
+
+int main() {
+    int choice;
+    
+    do {
+        printf("\nEmployee Management System\n");
+        printf("----------------------------\n");
+        printf("1. Add Employee\n");
+        printf("2. List Employees\n");
+        printf("3. Delete Employee\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        
+        switch (choice) {
+            case 1:
+                add_employee();
+                break;
+            case 2:
+                list_employees();
+                break;
+            case 3:
+                delete_employee();
+                break;
+            case 4:
+                printf("Goodbye!\n");
+                break;
+            default:
+                printf("Error: Invalid choice.\n");
+                break;
+        }
+    } while (choice != 4);
+    
+    return 0;
+}
